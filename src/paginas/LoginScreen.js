@@ -74,11 +74,11 @@ const styles = StyleSheet.create({
     color: '#fff',
     marginBottom: 15,
   },
-  forgotPassword: { color: '#58D68D', alignSelf: 'flex-end', marginBottom: 30 },
+  forgotPassword: { color: '#9fc63b', alignSelf: 'flex-end', marginBottom: 30 },
   loginButton: {
     width: '100%',
     height: 50,
-    backgroundColor: '#58D68D',
+    backgroundColor: '#9fc63b',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
@@ -86,5 +86,5 @@ const styles = StyleSheet.create({
   },
   loginButtonText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
   createAccount: { color: '#aaa', marginTop: 10 },
-  createAccountLink: { color: '#58D68D', fontWeight: 'bold' },
+  createAccountLink: { color: '#9fc63b', fontWeight: 'bold' },
 });

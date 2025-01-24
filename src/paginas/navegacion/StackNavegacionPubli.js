@@ -9,7 +9,7 @@ export function StackNavegacionPubli() {
     const Stack = createStackNavigator();
     return(
         <Stack.Navigator screenOptions={{
-           // headerShown: false, //para quitar titulo de cabecera
+            headerShown: false, //para quitar titulo de cabecera
          }}>
             <Stack.Screen name="A1" component={StackA} />
             <Stack.Screen name="A2" component={StackB} />

@@ -1,0 +1,104 @@
+{
+    "usuarios": [
+      {
+        "_id": "mPV9oH9lnDXpOT3vR0slgaSCtjK2",
+        "nick": "Vedru",
+        "nombre": "Samuel",
+        "apellidos": "Ordóñez Pareja",
+        "profile_picture": "",
+        "_class": "es.vedruna.appVedruna.model.Usuario"
+      },
+      {
+        "_id": "pcnKgx3FDMe76I5H1Kc0QJnShm23",
+        "nick": "Samu",
+        "nombre": "Samuel",
+        "apellidos": "Ordóñez Pareja",
+        "profile_picture": "",
+        "_class": "es.vedruna.appVedruna.model.Usuario"
+      },
+      {
+        "_id": "LAJu3kCuR9OGc3Dq6yAhWEUDVlt2",
+        "nick": "Mongo",
+        "nombre": "Mongo",
+        "apellidos": "Db Atlas",
+        "profile_picture": "",
+        "_class": "es.vedruna.appVedruna.model.Usuario"
+      },
+      {
+        "_id": "79KsyajzdTWd1B2kZ3WRfRqmBVm2",
+        "nick": "Betis",
+        "nombre": "Real",
+        "apellidos": "Betis Balompie",
+        "profile_picture": "",
+        "_class": "es.vedruna.appVedruna.model.Usuario"
+      }
+    ],
+    "publicaciones": [
+      {
+        "_id": "67928773abbff2093aece689",
+        "user_id": "79KsyajzdTWd1B2kZ3WRfRqmBVm2",
+        "image_url": "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonym…",
+        "titulo": "Rbxbx",
+        "comentario": "vxbdb",
+        "like": [],
+        "createdAt": "2025-01-23T18:16:19.761+00:00",
+        "_class": "es.vedruna.appVedruna.model.Publicacion"
+      },
+      {
+        "_id": "67928aababbff2093aece68a",
+        "user_id": "79KsyajzdTWd1B2kZ3WRfRqmBVm2",
+        "image_url": "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonym…",
+        "titulo": "Felissss",
+        "comentario": "Sin estudiar y con tiempo libre",
+        "like": [],
+        "createdAt": "2025-01-23T18:30:03.984+00:00",
+        "_class": "es.vedruna.appVedruna.model.Publicacion"
+      },
+      {
+        "_id": "67928dbbabbff2093aece68b",
+        "user_id": "79KsyajzdTWd1B2kZ3WRfRqmBVm2",
+        "image_url": "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonym…",
+        "titulo": "Tostada",
+        "comentario": "Mmmmm",
+        "like": [],
+        "createdAt": "2025-01-23T18:43:07.762+00:00",
+        "_class": "es.vedruna.appVedruna.model.Publicacion"
+      },
+      {
+        "_id": "6792c870abbff2093aece68c",
+        "user_id": "79KsyajzdTWd1B2kZ3WRfRqmBVm2",
+        "image_url": "file:///data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonym…",
+        "titulo": "Nuevo horario",
+        "comentario": "De regalo de reyes.",
+        "like": [],
+        "createdAt": "2025-01-23T22:53:36.036+00:00",
+        "_class": "es.vedruna.appVedruna.model.Publicacion"
+      }
+    ],
+    "comentarios": [
+      {
+        "id": "1",
+        "user_id": "mPV9oH9lnDXpOT3vR0slgaSCtjK2",
+        "idPublicacion": "67928773abbff2093aece689",
+        "comentario": "¡Gran publicación!"
+      },
+      {
+        "id": "2",
+        "user_id": "pcnKgx3FDMe76I5H1Kc0QJnShm23",
+        "idPublicacion": "67928aababbff2093aece68a",
+        "comentario": "Muy interesante."
+      },
+      {
+        "id": "3",
+        "user_id": "LAJu3kCuR9OGc3Dq6yAhWEUDVlt2",
+        "idPublicacion": "67928dbbabbff2093aece68b",
+        "comentario": "¡Qué rico!"
+      },
+      {
+        "id": "4",
+        "user_id": "79KsyajzdTWd1B2kZ3WRfRqmBVm2",
+        "idPublicacion": "6792c870abbff2093aece68c",
+        "comentario": "¡Me encanta el nuevo horario!"
+      }
+    ]
+  }
