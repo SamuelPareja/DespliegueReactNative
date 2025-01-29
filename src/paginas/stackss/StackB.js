@@ -1,41 +1,36 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity, Modal, TextInput, ScrollView, FlatList } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { getAuth } from "firebase/auth"; // Importamos Firebase Auth
-import data from "../data.json"; // Importamos el archivo data.json
+import { getAuth } from "firebase/auth";
+import data from "../data.json";
+
 
 export function StackB() {
   const navigation = useNavigation();
-  const route = useRoute(); // Obtén los parámetros pasados desde StackA
-  const { post } = route.params; // Extrae la publicación seleccionada
+  const route = useRoute();
+  const { post, comentarios } = route.params; // Recibimos los comentarios como parámetro
 
-  const [userName, setUserName] = useState("Usuario desconocido"); // Estado inicial para el nombre del usuario
-  const [currentUser, setCurrentUser] = useState(null); // Estado para el usuario autenticado
+  const [userName, setUserName] = useState("Usuario desconocido");
+  const [currentUser, setCurrentUser] = useState(null);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [comments, setComments] = useState(comentarios || []); // Inicializamos con los comentarios recibidos
+  const [currentComment, setCurrentComment] = useState("");
+  const [isLiked, setIsLiked] = useState(false);
 
   useEffect(() => {
-    // Buscamos el usuario correspondiente al post.user_id en data.json
     const usuario = data.usuarios.find((usuario) => usuario._id === post.user_id);
     if (usuario) {
-      setUserName(usuario.nombre); // Actualizamos el estado con el nombre del usuario
+      setUserName(usuario.nombre);
     }
 
-    // Obtenemos el usuario autenticado
     const auth = getAuth();
     const user = auth.currentUser;
     if (user) {
       setCurrentUser(user);
     }
+
+    // Ya no necesitamos filtrar los comentarios aquí, ya que los recibimos filtrados
   }, [post.user_id]);
-
-  const [modalVisible, setModalVisible] = useState(false);
-  const [comments, setComments] = useState([]);
-  const [currentComment, setCurrentComment] = useState("");
-
-  useEffect(() => {
-    // Filtramos los comentarios correspondientes a la publicación actual
-    const postComments = data.comentarios.filter((comment) => comment.idPublicacion === post._id);
-    setComments(postComments);
-  }, [post._id]);
 
   const handlePublishComment = () => {
     if (currentComment.trim() && currentUser) {
@@ -49,6 +44,10 @@ export function StackB() {
       setCurrentComment("");
       setModalVisible(false);
     }
+  };
+
+  const toggleLike = () => {
+    setIsLiked(prevLiked => !prevLiked);
   };
 
   const renderComment = ({ item }) => {
@@ -67,7 +66,6 @@ export function StackB() {
   return (
     <View style={styles.container}>
       <ScrollView style={styles.scrollContent} contentContainerStyle={styles.scrollInnerContent}>
-        {/* Header */}
         <View style={styles.header}>
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Text style={styles.arrow}>&lt;</Text>
@@ -75,11 +73,10 @@ export function StackB() {
           <Image source={require("../../../assets/user_default.png")} style={styles.userImage} />
           <View style={styles.userInfo}>
             <Text style={styles.userPublished}>Publicado por</Text>
-            <Text style={styles.userName}>{userName}</Text> {/* Nombre dinámico del usuario */}
+            <Text style={styles.userName}>{userName}</Text>
           </View>
         </View>
 
-        {/* Main Image */}
         {post.image_url ? (
           <Image 
             source={{ uri: post.image_url }} 
@@ -89,21 +86,22 @@ export function StackB() {
           <Text style={styles.noImageText}>Imagen no disponible</Text>
         )}
 
-        {/* Likes */}
-        <Text style={styles.likes}>❤️ {post.likes || 0} me gusta</Text> {/* Likes dinámicos */}
+        <TouchableOpacity onPress={toggleLike}>
+          <Text style={styles.likes}>
+            {isLiked ? '💚' : '🤍'} {(post.like ? post.like.length : 0) + (isLiked ? 1 : 0)} me gusta
+          </Text>
+        </TouchableOpacity>
 
-        {/* Content */}
         <View style={styles.content}>
-          <Text style={styles.title}>{post.titulo || "Sin título"}</Text> {/* Título dinámico */}
-          <Text style={styles.description}>{post.comentario || "Sin descripción"}</Text> {/* Descripción dinámica */}
+          <Text style={styles.title}>{post.titulo || "Sin título"}</Text>
+          <Text style={styles.description}>{post.comentario || "Sin descripción"}</Text>
           <Text style={styles.time}>
             {post.createdAt
               ? new Date(post.createdAt).toLocaleDateString()
-              : "Fecha desconocida"} {/* Fecha dinámica */}
+              : "Fecha desconocida"}
           </Text>
         </View>
 
-        {/* Comments Header */}
         <View style={styles.commentsHeaderContainer}>
           <Text style={styles.commentsHeader}>COMENTARIOS</Text>
           <TouchableOpacity style={styles.addCommentButton} onPress={() => setModalVisible(true)}>
@@ -114,20 +112,18 @@ export function StackB() {
           </TouchableOpacity>
         </View>
 
-        {/* Comments */}
         {comments.length === 0 ? (
           <Text style={styles.noComments}>No hay comentarios.</Text>
         ) : (
           <FlatList
             data={comments}
             renderItem={renderComment}
-            keyExtractor={(item, index) => index.toString()}
+            keyExtractor={(item) => item.id}
             contentContainerStyle={styles.commentsContainer}
           />
         )}
       </ScrollView>
 
-      {/* Modal */}
       <Modal
         transparent={true}
         visible={modalVisible}
@@ -160,6 +156,7 @@ export function StackB() {
     </View>
   );
 }
+
 
 
 const styles = StyleSheet.create({
@@ -209,7 +206,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   likes: {
-    color: '#9fc63b',
+    color: '#ffffff',
     fontSize: 14,
     marginBottom: 20,
   },
