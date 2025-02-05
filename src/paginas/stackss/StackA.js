@@ -162,8 +162,6 @@ export function StackA() {
   );
 }
 
-
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

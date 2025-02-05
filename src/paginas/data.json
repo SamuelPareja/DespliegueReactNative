@@ -100,5 +100,14 @@
         "idPublicacion": "6792c870abbff2093aece68c",
         "comentario": "¡Me encanta el nuevo horario!"
       }
+    ], 
+    "incidencias": [
+      {
+        "id": "",
+        "user_id": "",
+        "numero_del_equipo": "",
+        "titulo": "",
+        "descripcion": ""
+      }
     ]
   }

@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, Alert } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
 import { getAuth, createUserWithEmailAndPassword } from 'firebase/auth';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export function RegisterScreen() {
   const [email, setEmail] = useState('');
@@ -18,6 +19,8 @@ export function RegisterScreen() {
       // Registrar usuario en Firebase
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const uid = userCredential.user.uid; // Obtener el UID del usuario
+      await AsyncStorage.setItem("userEmail", email); // Guarda el email
+      await AsyncStorage.setItem("userName", nombre); // Guarda el email
 
       // Datos que se enviarán al backend
       const userData = {
