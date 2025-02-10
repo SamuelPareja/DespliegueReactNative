@@ -46,11 +46,15 @@ export function LoginScreen() {
       <TouchableOpacity style={styles.loginButton} onPress={handleSignIn}>
         <Text style={styles.loginButtonText}>Log in</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('Registrar')}>
-        <Text style={styles.createAccount}>
-          ¿No tienes cuenta? <Text style={styles.createAccountLink}>Crear cuenta</Text>
-        </Text>
-      </TouchableOpacity>
+  
+      {/* Contenedor para el texto en la parte inferior */}
+      <View style={styles.bottomContainer}>
+        <TouchableOpacity onPress={() => navigation.navigate('Registrar')}>
+          <Text style={styles.createAccount}>
+            ¿No tienes cuenta? <Text style={styles.createAccountLink}>Crear cuenta</Text>
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -86,5 +90,11 @@ const styles = StyleSheet.create({
   },
   loginButtonText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
   createAccount: { color: '#aaa', marginTop: 10 },
-  createAccountLink: { color: '#9fc63b', fontWeight: 'bold' },
+  createAccountLink: { color: '#9fc63b', fontWeight: 'bold' 
+  },
+  bottomContainer: {
+    position: 'absolute',
+    bottom: 30, 
+    alignSelf: 'center',
+  },
 });

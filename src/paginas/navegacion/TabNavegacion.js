@@ -13,7 +13,7 @@ export function TabNavegacion() {
             screenOptions={{
                 headerShown: false,
                 tabBarStyle: { backgroundColor: "#282828" },
-                tabBarActiveTintColor: "#ffffff",
+                tabBarActiveTintColor: "#9fc63b",
                 tabBarInactiveTintColor: "#aaa",
             }}
         >
@@ -45,7 +45,7 @@ export function TabNavegacion() {
                 }}
             />
             <Tab.Screen
-                name="Ajustes"
+                name="Incidencias"
                 component={StackNavegacionSettings}  // 🔹 Usa el Stack en lugar de SettingsScreen
                 options={{
                     tabBarIcon: ({ color, size }) => (

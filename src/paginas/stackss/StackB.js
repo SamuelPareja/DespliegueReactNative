@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { View, Text, Image, StyleSheet, TouchableOpacity, Modal, TextInput, ScrollView, FlatList } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { getAuth } from "firebase/auth";
 import data from "../data.json";
-
+import { ProfileImageContext  } from '../ProfileImageContext';
 
 export function StackB() {
   const navigation = useNavigation();
@@ -16,6 +16,7 @@ export function StackB() {
   const [comments, setComments] = useState(comentarios || []); // Inicializamos con los comentarios recibidos
   const [currentComment, setCurrentComment] = useState("");
   const [isLiked, setIsLiked] = useState(false);
+  const { profileImageUri } = useContext(ProfileImageContext);
 
   useEffect(() => {
     const usuario = data.usuarios.find((usuario) => usuario._id === post.user_id);
@@ -54,7 +55,11 @@ export function StackB() {
     const usuario = data.usuarios.find((usuario) => usuario._id === item.user_id);
     return (
       <View style={styles.commentWrapper}>
-        <Image source={require("../../../assets/user_default.png")} style={styles.commentUserImage} />
+        {profileImageUri ? (
+          <Image source={{ uri: profileImageUri }} style={styles.commentUserImage} />
+           ) : (
+         <Image source={require("../../../assets/user_default.png")} style={styles.commentUserImage} />
+          )}
         <View style={styles.commentContent}>
           <Text style={styles.commentUserName}>{usuario ? usuario.nombre : "Usuario desconocido"}</Text>
           <Text style={styles.commentText}>{item.comentario}</Text>
@@ -70,7 +75,11 @@ export function StackB() {
           <TouchableOpacity onPress={() => navigation.goBack()}>
             <Text style={styles.arrow}>&lt;</Text>
           </TouchableOpacity>
-          <Image source={require("../../../assets/user_default.png")} style={styles.userImage} />
+          {profileImageUri ? (
+            <Image source={{ uri: profileImageUri }} style={styles.userImage} />
+            ) : (
+            <Image source={require("../../../assets/user_default.png")} style={styles.userImage} />
+          )}
           <View style={styles.userInfo}>
             <Text style={styles.userPublished}>Publicado por</Text>
             <Text style={styles.userName}>{userName}</Text>

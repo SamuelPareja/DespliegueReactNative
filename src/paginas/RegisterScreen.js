@@ -20,7 +20,7 @@ export function RegisterScreen() {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const uid = userCredential.user.uid; // Obtener el UID del usuario
       await AsyncStorage.setItem("userEmail", email); // Guarda el email
-      await AsyncStorage.setItem("userName", nombre); // Guarda el email
+      await AsyncStorage.setItem("userName", nombre); // Guarda el nombre
 
       // Datos que se enviarán al backend
       const userData = {
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 18,
-    color: '#58D68D',
+    color: '#9fc63b',
     fontWeight: 'bold',
     marginBottom: 20,
     textAlign: 'center',
@@ -138,13 +138,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   finalizeButton: {
-    width: '100%',
+    width: '50%',
     height: 50,
-    backgroundColor: '#58D68D',
+    backgroundColor: 'transparent',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 10,
     marginTop: 20,
+    borderWidth: 2, 
+    borderColor: '#9fc63b',
   },
   finalizeButtonText: {
     color: '#fff',

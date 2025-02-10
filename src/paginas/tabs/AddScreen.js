@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Image,
   Alert,
+  ScrollView,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { getAuth } from 'firebase/auth';
@@ -27,18 +28,64 @@ export function AddScreen() {
     }
   }, []);
 
-  const seleccionarImagen = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      setImageUri(result.assets[0].uri);
-    }
-  };
+    const seleccionarImagen = async () => {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+            Alert.alert('Permiso denegado', 'Necesitamos permiso para acceder a tu galería.');
+            return;
+        }
+    
+        Alert.alert(
+            "Seleccionar imagen",
+            "¿Qué deseas hacer?",
+            [
+                {
+                    text: "Tomar foto",
+                    onPress: tomarFoto
+                },
+                {
+                    text: "Elegir de la galería",
+                    onPress: elegirDeGaleria
+                },
+                {
+                    text: "Cancelar",
+                    style: "cancel"
+                }
+            ]
+        );
+    };
+    
+    const tomarFoto = async () => {
+        const { status } = await ImagePicker.requestCameraPermissionsAsync();
+        if (status !== 'granted') {
+            Alert.alert('Permiso denegado', 'Necesitamos permiso para acceder a tu cámara.');
+            return;
+        }
+    
+        const result = await ImagePicker.launchCameraAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+    
+        if (!result.canceled) {
+            setImageUri(result.assets[0].uri);
+        }
+    };
+    
+    const elegirDeGaleria = async () => {
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+    
+        if (!result.canceled) {
+            setImageUri(result.assets[0].uri);
+        }
+    };  
 
   const publicar = async () => {
     if (!title || !description || !imageUri) {
@@ -83,58 +130,64 @@ export function AddScreen() {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>PUBLICACIÓN</Text>
+    <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.container}>
+        <Text style={styles.header}>PUBLICACIÓN</Text>
 
-      <View style={styles.imageWrapper}>
-        <TouchableOpacity style={styles.imageContainer} onPress={seleccionarImagen}>
-          {imageUri ? (
-            <Image source={{ uri: imageUri }} style={styles.image} />
-          ) : (
-            <Image
-              source={require('../../../assets/Add.png')}
-              style={styles.imagePlaceholder}
-            />
-          )}
-        </TouchableOpacity>
+        <View style={styles.imageWrapper}>
+          <TouchableOpacity style={styles.imageContainer} onPress={seleccionarImagen}>
+            {imageUri ? (
+              <Image source={{ uri: imageUri }} style={styles.image} />
+            ) : (
+              <Image
+                source={require('../../../assets/Add.png')}
+                style={styles.imagePlaceholder}
+              />
+            )}
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.formContainer}>
+          <Text style={styles.label}>Título:</Text>
+          <TextInput
+            style={styles.input}
+            placeholder="Máx. 40 Caracteres"
+            placeholderTextColor="#707070"
+            maxLength={40}
+            value={title}
+            onChangeText={setTitle}
+          />
+
+          <Text style={styles.label}>Descripción:</Text>
+          <TextInput
+            style={[styles.input, styles.textArea]}
+            placeholder="Máx. 250 Caracteres"
+            placeholderTextColor="#707070"
+            maxLength={250}
+            multiline
+            value={description}
+            onChangeText={setDescription}
+          />
+
+          <TouchableOpacity style={styles.button} onPress={publicar}>
+            <Text style={styles.buttonText}>PUBLICAR</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-
-      <View style={styles.formContainer}>
-        <Text style={styles.label}>Título:</Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Máx. 40 Caracteres"
-          placeholderTextColor="#707070"
-          maxLength={40}
-          value={title}
-          onChangeText={setTitle}
-        />
-
-        <Text style={styles.label}>Descripción:</Text>
-        <TextInput
-          style={[styles.input, styles.textArea]}
-          placeholder="Máx. 250 Caracteres"
-          placeholderTextColor="#707070"
-          maxLength={250}
-          multiline
-          value={description}
-          onChangeText={setDescription}
-        />
-
-        <TouchableOpacity style={styles.button} onPress={publicar}>
-          <Text style={styles.buttonText}>PUBLICAR</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
+  scrollContainer: {
+    flexGrow: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: '#1B1B1B',
     paddingHorizontal: 20,
     paddingTop: 40,
+    paddingBottom: 20,
   },
   header: {
     fontSize: 24,
@@ -146,6 +199,7 @@ const styles = StyleSheet.create({
   imageWrapper: {
     alignItems: 'center',
     marginBottom: 30,
+    height: 160,
   },
   imageContainer: {
     width: 160,
@@ -168,8 +222,7 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     flex: 1,
-    justifyContent: 'flex-end',
-    paddingBottom: 80,
+    justifyContent: 'flex-start',
   },
   label: {
     color: '#9fc63b',
@@ -196,6 +249,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     alignSelf: 'center',
+    marginTop: 20,
   },
   buttonText: {
     color: '#FFFFFF',

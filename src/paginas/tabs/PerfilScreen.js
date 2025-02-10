@@ -1,8 +1,10 @@
 import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { getAuth } from "firebase/auth";
 import { firebaseApp } from '../../../firebase-config';
 import data from "../data.json";
+import * as ImagePicker from 'expo-image-picker';
+import { ProfileImageContext  } from '../ProfileImageContext';
 
 export function PerfilScreen() {
     const [publicaciones, setPublicaciones] = useState([]);
@@ -10,6 +12,8 @@ export function PerfilScreen() {
     const [nombre, setNombre] = useState('Cargando...');
     const [mostrarLikes, setMostrarLikes] = useState(false);
     const auth = getAuth(firebaseApp);
+    const { profileImageUri, setProfileImageUri } = useContext(ProfileImageContext);
+    
 
     useEffect(() => {
         const fetchUserData = () => {
@@ -69,13 +73,35 @@ export function PerfilScreen() {
         fetchPublicaciones();
     }, [mostrarLikes]);
 
+    const seleccionarImagen = async () => {
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+    
+        if (!result.canceled) {
+            setProfileImageUri(result.assets[0].uri);
+        }
+    };
+
     return (
         <View style={styles.container}>
             <View style={styles.profileTopSection}>
-                <Image source={require('../../../assets/user_default.png')} style={styles.profileImage} />
-                <View style={styles.publicacionesContainer}>
-                    <Text style={styles.publicacionesNumero}>{publicaciones.length}</Text>
-                    <Text style={styles.publicacionesTexto}>
+                <TouchableOpacity onPress={seleccionarImagen}>
+                    {profileImageUri ? (
+                        <Image source={{ uri: profileImageUri }} style={styles.profileImage} />
+                    ) : (
+                        <Image source={require("../../../assets/user_default.png")} style={styles.profileImage} />
+                    )}
+                </TouchableOpacity> 
+
+                <View style={[styles.publicacionesContainer, mostrarLikes && styles.likesContainer]}>
+                    <Text style={[styles.publicacionesNumero, mostrarLikes && styles.likesNumero]}>
+                        {publicaciones.length}
+                    </Text>
+                    <Text style={[styles.publicacionesTexto, mostrarLikes && styles.likesTexto]}>
                         {mostrarLikes ? "likes" : "publicaciones"}
                     </Text>
                 </View>
@@ -142,6 +168,14 @@ const styles = StyleSheet.create({
         borderColor: '#9fc63b',
         marginRight: 15,
     },
+    profile: {
+        width: 80,
+        height: 80,
+        borderRadius: 40,
+        borderWidth: 2,
+        borderColor: '#9fc63b',
+        marginRight: 15,
+    },
     publicacionesContainer: {
         alignItems: 'center',
     },
@@ -149,6 +183,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         color: '#ffffff',
         fontWeight: 'bold',
+        
     },
     publicacionesTexto: {
         fontSize: 14,
@@ -193,5 +228,8 @@ const styles = StyleSheet.create({
         width: "100%",
         height: "100%",
         borderRadius: 5,
+    },
+    likesContainer: {
+        marginLeft: 29, 
     },
 });

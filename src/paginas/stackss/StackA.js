@@ -1,12 +1,15 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useContext } from "react";
 import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { getAuth } from "firebase/auth";
 import data from "../data.json";
+import { ProfileImageContext  } from '../ProfileImageContext';
+
 
 const PublicationItem = React.memo(({ post, usuario, onLike, isLiked, comentarios }) => {
   const navigation = useNavigation();
   const postComments = comentarios.filter(comment => comment.idPublicacion === post._id);
+  const { profileImageUri } = useContext(ProfileImageContext);
 
   return (
     <View style={styles.publicationWrapper}>
@@ -15,10 +18,11 @@ const PublicationItem = React.memo(({ post, usuario, onLike, isLiked, comentario
         onPress={() => navigation.navigate("A2", { post, comentarios: postComments })}
       >
         <View style={styles.userInfo}>
-          <Image
-            source={require("../../../assets/user_default.png")}
-            style={styles.userImage}
-          />
+          {profileImageUri ? (
+            <Image source={{ uri: profileImageUri }} style={styles.userImage} />
+              ) : (
+            <Image source={require("../../../assets/user_default.png")} style={styles.userImage} />
+             )}
           <View>
             <Text style={styles.publishedBy}>Publicado por</Text>
             <Text style={styles.userName}>
@@ -90,6 +94,7 @@ export function StackA() {
         setUsuarios(usuariosPorId);
         setLikes(initialLikes);
         setComentarios(data.comentarios);
+
       } catch (error) {
         console.error("Error al cargar datos:", error);
       } finally {

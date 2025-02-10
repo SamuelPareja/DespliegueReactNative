@@ -21,17 +21,63 @@ export function NuevaIncidenciaScreen() {
     }, []);
 
     const seleccionarImagen = async () => {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+            Alert.alert('Permiso denegado', 'Necesitamos permiso para acceder a tu galería.');
+            return;
+        }
+    
+        Alert.alert(
+            "Seleccionar imagen",
+            "¿Qué deseas hacer?",
+            [
+                {
+                    text: "Tomar foto",
+                    onPress: tomarFoto
+                },
+                {
+                    text: "Elegir de la galería",
+                    onPress: elegirDeGaleria
+                },
+                {
+                    text: "Cancelar",
+                    style: "cancel"
+                }
+            ]
+        );
+    };
+    
+    const tomarFoto = async () => {
+        const { status } = await ImagePicker.requestCameraPermissionsAsync();
+        if (status !== 'granted') {
+            Alert.alert('Permiso denegado', 'Necesitamos permiso para acceder a tu cámara.');
+            return;
+        }
+    
+        const result = await ImagePicker.launchCameraAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.Images,
+            allowsEditing: true,
+            aspect: [4, 3],
+            quality: 1,
+        });
+    
+        if (!result.canceled) {
+            setImageUri(result.assets[0].uri);
+        }
+    };
+    
+    const elegirDeGaleria = async () => {
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
             allowsEditing: true,
             aspect: [4, 3],
             quality: 1,
         });
-
+    
         if (!result.canceled) {
             setImageUri(result.assets[0].uri);
         }
-    };
+    };    
 
     const enviarIncidencia = async () => {
         if (!equipoClase || !titulo || !descripcion || !imageUri) {
